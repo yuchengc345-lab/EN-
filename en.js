@@ -13,24 +13,38 @@ const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 const groupSelect = document.getElementById('groupSelect');
 
-// 🌟 核心修改：初始化下拉選單並加入自動編號
+// 🌟 核心修改：初始化選單，並加入「分類群組 (optgroup)」
 function initSelect() {
+  let currentCategory = "";
+  let optgroup = null;
+  let groupCounter = 1; // 用來計算在這個分類底下是第幾組
+
   wordGroups.forEach((group, index) => {
+    // 當遇到新的分類時，建立一個粗體的大標題群組
+    if (group.category !== currentCategory) {
+      currentCategory = group.category;
+      groupCounter = 1; // 換新分類時，組數從 1 開始重新算
+      
+      optgroup = document.createElement('optgroup');
+      optgroup.label = `📚 ${currentCategory}`; // 顯示為 📚 三年內外英文 等
+      groupSelect.appendChild(optgroup);
+    }
+
     const option = document.createElement('option');
     option.value = index;
     
-    // 動態計算這組的單字範圍
-    const startNum = index * 10 + 1;
-    const endNum = index * 10 + group.words.length;
+    // 動態計算這組的單字範圍 (1-10, 11-20...)
+    const startNum = (groupCounter - 1) * 10 + 1;
+    const endNum = (groupCounter - 1) * 10 + group.words.length;
     
-    // 設定顯示格式，例如：題庫 1 (1-10)：第 1 組 (心血管系統 1)
-    option.innerText = `題庫 ${index + 1} (${startNum}-${endNum})：${group.groupName}`;
+    // 設定顯示格式，例如：第 1 組 (1-10)：心血管系統 1
+    option.innerText = `第 ${groupCounter} 組 (${startNum}-${endNum})：${group.groupName}`;
     
-    groupSelect.appendChild(option);
+    optgroup.appendChild(option);
+    groupCounter++;
   });
 }
 
-// 切換題庫
 groupSelect.addEventListener('change', (e) => {
   currentGroupIndex = parseInt(e.target.value);
   wordDictionary = wordGroups[currentGroupIndex].words;
@@ -38,7 +52,6 @@ groupSelect.addEventListener('change', (e) => {
   loadQuestion(currentWordIndex);
 });
 
-// 載入題目
 function loadQuestion(index) {
   container.innerHTML = '';
   msgElement.innerText = '';
@@ -51,7 +64,6 @@ function loadQuestion(index) {
   const currentData = wordDictionary[index];
   hintElement.innerText = currentData.chinese;
 
-  // 建立輸入框
   const input = document.createElement('input');
   input.type = "text";
   input.className = 'word-input';
@@ -59,7 +71,6 @@ function loadQuestion(index) {
   input.autocomplete = "off"; 
   input.spellcheck = false; 
   
-  // 監聽打字動作：只要一打字，就自動清除錯誤狀態
   input.addEventListener('input', () => {
       if (input.classList.contains('wrong')) {
           input.classList.remove('wrong'); 
@@ -68,7 +79,6 @@ function loadQuestion(index) {
       }
   });
 
-  // 監聽 Enter 鍵送出
   input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && checkBtn.style.display !== 'none') {
           checkBtn.click();
@@ -80,7 +90,6 @@ function loadQuestion(index) {
   setTimeout(() => input.focus(), 10);
 }
 
-// 檢查答案邏輯
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
   const answer = currentData.english.toLowerCase();
@@ -90,38 +99,32 @@ checkBtn.addEventListener('click', () => {
   let isCorrect = (userInput === answer);
 
   if (isCorrect) {
-      // 答對的狀態
       input.className = 'word-input correct';
       msgElement.innerText = "🎉 完全正確！";
       msgElement.className = "success-msg correct-text";
       input.disabled = true; 
       checkBtn.style.display = 'none';
   } else {
-      // 答錯的狀態：不鎖定輸入框，自動反白錯字
       input.className = 'word-input wrong';
       msgElement.innerText = "❌ 拼錯囉！直接打字覆蓋，然後按 Enter 再試一次吧！";
       msgElement.className = "success-msg wrong-text";
       correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50;">${answer}</span>`;
-      
       input.select(); 
   }
 });
 
-// 上一題
 prevBtn.addEventListener('click', () => {
   currentWordIndex--;
   if (currentWordIndex < 0) currentWordIndex = wordDictionary.length - 1;
   loadQuestion(currentWordIndex);
 });
 
-// 下一題
 nextBtn.addEventListener('click', () => {
   currentWordIndex++;
   if (currentWordIndex >= wordDictionary.length) currentWordIndex = 0;
   loadQuestion(currentWordIndex);
 });
 
-// 鍵盤左右鍵切換
 document.addEventListener('keydown', (e) => {
   if (document.activeElement.tagName === 'INPUT') return; 
   if (e.key === 'ArrowLeft') prevBtn.click();
