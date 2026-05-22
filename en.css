@@ -7,12 +7,9 @@ body {
 }
 
 .app-wrapper {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  width: 500px; 
+  width: 90%;
+  max-width: 500px;
+  box-sizing: borswi-box;
 }
 
 .progress-text { font-size: 14px; color: #888; margin-bottom: 10px; }
@@ -26,9 +23,9 @@ body {
 }
 
 .word-input {
-  width: 90%;
+  width: 100%; /* 🌟 讓輸入框填滿整個白色卡片，手指更好點擊 */
   height: 50px;
-  font-size: 24px;
+  font-size: 22px; /* 字體稍微調小一點點，避免在手機上過大 */
   padding: 5px 15px;
   border: 2px solid #ddd;
   border-radius: 8px;
@@ -36,7 +33,7 @@ body {
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
-  font-family: monospace; /* 讓英文字母等寬，更好對齊 */
+  font-family: monospace;
 }
 
 .word-input:focus {
