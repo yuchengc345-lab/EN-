@@ -56,3 +56,34 @@ body {
   margin-top: 20px;
   min-height: 24px;
 }
+/* ... (保留你原本上面所有的 CSS) ... */
+
+/* 新增的按鈕樣式 */
+.check-btn {
+  padding: 10px 25px;
+  font-size: 18px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: bold;
+}
+.check-btn:hover {
+  background-color: #1976d2;
+}
+.check-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 答案提示文字樣式 */
+.answer-msg {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+.correct-text { color: #4caf50; }
+.wrong-text { color: #f44336; }
