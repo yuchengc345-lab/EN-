@@ -12,34 +12,37 @@ const nextBtn = document.getElementById('nextBtn');
 const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 const groupSelect = document.getElementById('groupSelect');
+const speakBtn = document.getElementById('speakBtn'); // 🌟 新增：綁定喇叭按鈕
 
-// 🌟 核心修改：初始化選單，並加入「分類群組 (optgroup)」
+// 🌟 核心新功能：瀏覽器語音合成發音
+function speakWord(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // 停止上一句還沒唸完的發音
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US'; // 設定為美式英文
+    utterance.rate = 0.85;    // 語速調慢一點點 (0.85倍速)，適合學習
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
 function initSelect() {
   let currentCategory = "";
   let optgroup = null;
-  let groupCounter = 1; // 用來計算在這個分類底下是第幾組
+  let groupCounter = 1; 
 
   wordGroups.forEach((group, index) => {
-    // 當遇到新的分類時，建立一個粗體的大標題群組
     if (group.category !== currentCategory) {
       currentCategory = group.category;
-      groupCounter = 1; // 換新分類時，組數從 1 開始重新算
-      
+      groupCounter = 1; 
       optgroup = document.createElement('optgroup');
-      optgroup.label = `📚 ${currentCategory}`; // 顯示為 📚 三年內外英文 等
+      optgroup.label = `📚 ${currentCategory}`; 
       groupSelect.appendChild(optgroup);
     }
-
     const option = document.createElement('option');
     option.value = index;
-    
-    // 動態計算這組的單字範圍 (1-10, 11-20...)
     const startNum = (groupCounter - 1) * 10 + 1;
     const endNum = (groupCounter - 1) * 10 + group.words.length;
-    
-    // 設定顯示格式，例如：第 1 組 (1-10)：心血管系統 1
     option.innerText = `第 ${groupCounter} 組 (${startNum}-${endNum})：${group.groupName}`;
-    
     optgroup.appendChild(option);
     groupCounter++;
   });
@@ -63,6 +66,9 @@ function loadQuestion(index) {
 
   const currentData = wordDictionary[index];
   hintElement.innerText = currentData.chinese;
+
+  // 🌟 新增：載入題目時，自動唸出英文單字！
+  speakWord(currentData.english);
 
   const input = document.createElement('input');
   input.type = "text";
@@ -89,6 +95,15 @@ function loadQuestion(index) {
   
   setTimeout(() => input.focus(), 10);
 }
+
+// 🌟 新增：點擊喇叭按鈕時，重新唸一次單字
+speakBtn.addEventListener('click', () => {
+  const currentData = wordDictionary[currentWordIndex];
+  speakWord(currentData.english);
+  // 點擊完喇叭後，把焦點還給輸入框，方便繼續打字
+  const input = container.querySelector('.word-input');
+  if(input) input.focus();
+});
 
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
