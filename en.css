@@ -12,76 +12,51 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
-  width: 500px; /* 稍微加寬，容納長的醫護術語 */
+  width: 500px; 
 }
 
-.progress-text {
-  font-size: 14px;
-  color: #888;
-  margin-bottom: 10px;
-}
+.progress-text { font-size: 14px; color: #888; margin-bottom: 10px; }
+.question-card { margin-bottom: 20px; font-size: 18px; }
+.hint-text { font-weight: bold; color: #333; font-size: 22px; }
 
-.question-card {
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.hint-text {
-  font-weight: bold;
-  color: #333;
-  font-size: 22px;
-}
-
-/* 核心：輸入框區域的佈局 */
+/* --- 核心修改：普通輸入框的樣式 --- */
 .input-container { 
-  display: flex; 
-  flex-direction: column; /* 強制格子多排顯示 */
-  gap: 15px; /* 排與排之間的間距 */
   margin-top: 20px; 
   margin-bottom: 30px;
-  align-items: center; /* 格子整體居中 */
 }
 
-/* 每排格子的容器 */
-.letter-row {
-  display: flex;
-  justify-content: center; /* 排內格子居中 */
-  gap: 0px; /* 告別分開，格子邊對邊 */
-}
-
-/* 核心：新的格子樣式 */
-.letter-box { 
-  width: 42px; /* 稍微加寬 */
-  height: 52px; 
-  border: 1px solid #ddd; /* 稍微細一點的邊框 */
-  border-radius: 0px; /* 告別圓角，變成平直邊緣 */
-  text-align: center; 
-  font-size: 26px; 
-  font-weight: bold;
+.word-input {
+  width: 90%;
+  height: 50px;
+  font-size: 24px;
+  padding: 5px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
   outline: none;
   transition: all 0.2s ease;
-  text-transform: lowercase;
-  margin: 0; /* 確保沒有任何間距 */
+  box-sizing: border-box;
+  font-family: monospace; /* 讓英文字母等寬，更好對齊 */
 }
 
-/* 左右兩端的格子樣式：加上半圓角，變成整體 */
-.letter-box:first-child {
-  border-radius: 8px 0 0 8px; /* 左側半圓角 */
-}
-.letter-box:last-child {
-  border-radius: 0 8px 8px 0; /* 右側半圓角 */
+.word-input:focus {
+  border-color: #2196f3;
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
 }
 
-/* 若這排只有一個字母，就是全圓角 */
-.letter-box:only-child {
-  border-radius: 8px;
+.word-input.correct { 
+  color: #4caf50; 
+  border-color: #4caf50; 
+  background-color: #e8f5e9; 
 }
 
-.letter-box:focus { border-color: #2196f3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.5); z-index: 10; /* 確保焦點框浮在上面 */ }
-.correct { color: #4caf50; border-color: #4caf50; background-color: #e8f5e9; }
-.wrong { color: #f44336; border-color: #f44336; background-color: #ffebee; }
+.word-input.wrong { 
+  color: #f44336; 
+  border-color: #f44336; 
+  background-color: #ffebee; 
+}
+/* --------------------------------- */
 
-/* 剩餘樣式保持不變 */
 .control-panel {
   display: flex;
   justify-content: center;
