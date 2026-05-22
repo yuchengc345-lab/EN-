@@ -1,0 +1,58 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  background-color: #f5f7fa;
+}
+
+.app-wrapper {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.question-card {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.hint-text {
+  font-weight: bold;
+  color: #333;
+  font-size: 22px;
+}
+
+.input-container { 
+  display: flex; 
+  justify-content: center;
+  gap: 8px; 
+  margin-top: 20px; 
+}
+
+.letter-box { 
+  width: 40px; 
+  height: 50px; 
+  border: 2px solid #ddd; 
+  border-radius: 8px;
+  text-align: center; 
+  font-size: 24px; 
+  font-weight: bold;
+  outline: none;
+  transition: all 0.2s ease;
+  text-transform: lowercase; /* 强制显示为小写 */
+}
+
+/* 各种交互状态的颜色反馈 */
+.letter-box:focus { border-color: #2196f3; box-shadow: 0 0 5px rgba(33, 150, 243, 0.4); }
+.correct { color: #4caf50; border-color: #4caf50; background-color: #e8f5e9; }
+.wrong { color: #f44336; border-color: #f44336; background-color: #ffebee; }
+
+.success-msg {
+  color: #4caf50;
+  font-weight: bold;
+  margin-top: 20px;
+  min-height: 24px;
+}
