@@ -6,19 +6,26 @@ const container = document.getElementById('inputContainer');
 const hintElement = document.getElementById('chineseHint');
 const msgElement = document.getElementById('successMessage');
 const checkBtn = document.getElementById('checkBtn');
-const retryBtn = document.getElementById('retryBtn'); // 我們不再使用這個按鈕，它會一直隱藏
+const retryBtn = document.getElementById('retryBtn'); 
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 const groupSelect = document.getElementById('groupSelect');
 
-// 初始化下拉選單
+// 🌟 核心修改：初始化下拉選單並加入自動編號
 function initSelect() {
   wordGroups.forEach((group, index) => {
     const option = document.createElement('option');
     option.value = index;
-    option.innerText = group.groupName;
+    
+    // 動態計算這組的單字範圍
+    const startNum = index * 10 + 1;
+    const endNum = index * 10 + group.words.length;
+    
+    // 設定顯示格式，例如：題庫 1 (1-10)：第 1 組 (心血管系統 1)
+    option.innerText = `題庫 ${index + 1} (${startNum}-${endNum})：${group.groupName}`;
+    
     groupSelect.appendChild(option);
   });
 }
@@ -37,7 +44,7 @@ function loadQuestion(index) {
   msgElement.innerText = '';
   correctAnswerMsg.innerText = ''; 
   checkBtn.style.display = 'inline-block';
-  retryBtn.style.display = 'none'; // 永遠隱藏重新練習按鈕
+  retryBtn.style.display = 'none'; 
 
   progressText.innerText = `第 ${index + 1} 題 / 共 ${wordDictionary.length} 題`;
 
@@ -52,12 +59,12 @@ function loadQuestion(index) {
   input.autocomplete = "off"; 
   input.spellcheck = false; 
   
-  // 🌟 核心新功能：監聽打字動作。只要一打字，就自動清除錯誤狀態！
+  // 監聽打字動作：只要一打字，就自動清除錯誤狀態
   input.addEventListener('input', () => {
       if (input.classList.contains('wrong')) {
-          input.classList.remove('wrong'); // 移除紅色邊框
-          msgElement.innerText = ''; // 清空錯誤訊息
-          correctAnswerMsg.innerText = ''; // 清空答案提示
+          input.classList.remove('wrong'); 
+          msgElement.innerText = ''; 
+          correctAnswerMsg.innerText = ''; 
       }
   });
 
@@ -87,17 +94,15 @@ checkBtn.addEventListener('click', () => {
       input.className = 'word-input correct';
       msgElement.innerText = "🎉 完全正確！";
       msgElement.className = "success-msg correct-text";
-      input.disabled = true; // 答對了才把輸入框鎖定
+      input.disabled = true; 
       checkBtn.style.display = 'none';
   } else {
-      // ❌ 答錯的狀態
+      // 答錯的狀態：不鎖定輸入框，自動反白錯字
       input.className = 'word-input wrong';
       msgElement.innerText = "❌ 拼錯囉！直接打字覆蓋，然後按 Enter 再試一次吧！";
       msgElement.className = "success-msg wrong-text";
       correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50;">${answer}</span>`;
       
-      // 🌟 核心新功能：答錯時不再鎖定輸入框，也不隱藏「確定送出」按鈕
-      // 將裡面的錯誤文字「自動反白全選」，讓你不用按刪除，直接敲鍵盤就能覆蓋重寫
       input.select(); 
   }
 });
