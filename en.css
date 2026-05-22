@@ -120,3 +120,18 @@ body {
   color: #2196f3;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+/* --- 發音按鈕樣式 --- */
+.speak-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  margin-left: 10px;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+  padding: 5px;
+}
+
+.speak-btn:hover {
+  transform: scale(1.2); /* 滑鼠游標移過去時會放大一點點 */
+}
