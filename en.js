@@ -9,18 +9,30 @@ const container = document.getElementById('inputContainer');
 const hintElement = document.getElementById('chineseHint');
 const msgElement = document.getElementById('successMessage');
 const checkBtn = document.getElementById('checkBtn');
+const retryBtn = document.getElementById('retryBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 
 function loadQuestion(index) {
+  // 清空狀態
   container.innerHTML = '';
   msgElement.innerText = '';
   correctAnswerMsg.innerText = ''; 
-  checkBtn.disabled = false; // 恢復按鈕可點擊
+  
+  // 顯示/隱藏對應按鈕
+  checkBtn.style.display = 'inline-block';
+  retryBtn.style.display = 'none';
+
+  // 更新進度文字
+  progressText.innerText = `第 ${index + 1} 題 / 共 ${wordDictionary.length} 題`;
 
   const currentData = wordDictionary[index];
   const answer = currentData.english.toLowerCase();
   hintElement.innerText = currentData.chinese;
 
+  // 生成輸入框
   for (let i = 0; i < answer.length; i++) {
       const input = document.createElement('input');
       input.type = "text";
@@ -28,7 +40,6 @@ function loadQuestion(index) {
       input.className = 'letter-box';
       input.dataset.index = i; 
       
-      // 監聽輸入：現在只負責自動跳到下一格，不檢查對錯
       input.addEventListener('input', (e) => {
           const val = e.target.value;
           const idx = parseInt(e.target.dataset.index);
@@ -37,13 +48,12 @@ function loadQuestion(index) {
           }
       });
 
-      // 監聽鍵盤：支援按 Backspace 退回上一格，按 Enter 直接送出
       input.addEventListener('keydown', (e) => {
           const idx = parseInt(e.target.dataset.index);
           if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
               container.children[idx - 1].focus();
           }
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && checkBtn.style.display !== 'none') {
               checkBtn.click();
           }
       });
@@ -56,15 +66,13 @@ function loadQuestion(index) {
   }
 }
 
-// 點擊「確定」按鈕的檢查邏輯
+// 「確定送出」檢查邏輯
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
   const answer = currentData.english.toLowerCase();
   const inputs = Array.from(container.children);
-  
   let isAllCorrect = true;
 
-  // 檢查每一個字母
   inputs.forEach((input, idx) => {
       const val = input.value.toLowerCase();
       if (val === answer[idx]) {
@@ -73,12 +81,13 @@ checkBtn.addEventListener('click', () => {
           input.className = 'letter-box wrong';
           isAllCorrect = false;
       }
-      input.disabled = true; // 檢查後鎖定輸入框，不讓使用者修改
+      input.disabled = true; // 檢查後鎖定
   });
 
-  checkBtn.disabled = true; // 鎖定按鈕
+  // 切換按鈕狀態：藏起確定按鈕，顯示重新練習按鈕
+  checkBtn.style.display = 'none';
+  retryBtn.style.display = 'inline-block';
 
-  // 顯示結果與正確答案
   if (isAllCorrect) {
       msgElement.innerText = "🎉 完全正確！";
       msgElement.className = "success-msg correct-text";
@@ -87,17 +96,43 @@ checkBtn.addEventListener('click', () => {
       msgElement.className = "success-msg wrong-text";
       correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50; letter-spacing: 2px;">${answer}</span>`;
   }
+});
 
-  msgElement.innerText += " (5秒後進入下一題...)";
+// 「重新練習」按鈕點擊
+retryBtn.addEventListener('click', () => {
+  loadQuestion(currentWordIndex);
+});
 
-  // 5秒後進入下一題
-  setTimeout(() => {
-      currentWordIndex++;
-      if (currentWordIndex >= wordDictionary.length) {
-          currentWordIndex = 0; // 背完一輪重新開始
-      }
-      loadQuestion(currentWordIndex);
-  }, 5000);
+// 「上一題」按鈕點擊
+prevBtn.addEventListener('click', () => {
+  currentWordIndex--;
+  if (currentWordIndex < 0) {
+      currentWordIndex = wordDictionary.length - 1; // 循環回最後一題
+  }
+  loadQuestion(currentWordIndex);
+});
+
+// 「下一題」按鈕點擊
+nextBtn.addEventListener('click', () => {
+  currentWordIndex++;
+  if (currentWordIndex >= wordDictionary.length) {
+      currentWordIndex = 0; // 循環回第一題
+  }
+  loadQuestion(currentWordIndex);
+});
+
+// 🚀 全域鍵盤監聽：支援電腦左右鍵切換題目
+document.addEventListener('keydown', (e) => {
+  // 檢查目前光標是不是在輸入框裡，如果是，就不觸發左右鍵換題（避免打字時誤觸）
+  if (document.activeElement.tagName === 'INPUT') {
+      return; 
+  }
+  
+  if (e.key === 'ArrowLeft') {
+      prevBtn.click();
+  } else if (e.key === 'ArrowRight') {
+      nextBtn.click();
+  }
 });
 
 // 啟動第一題
