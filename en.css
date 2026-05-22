@@ -12,7 +12,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
-  width: 450px;
+  width: 500px; /* 稍微加寬，容納長的醫護術語 */
 }
 
 .progress-text {
@@ -32,32 +32,56 @@ body {
   font-size: 22px;
 }
 
+/* 核心：輸入框區域的佈局 */
 .input-container { 
   display: flex; 
-  justify-content: center;
-  gap: 8px; 
+  flex-direction: column; /* 強制格子多排顯示 */
+  gap: 15px; /* 排與排之間的間距 */
   margin-top: 20px; 
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  align-items: center; /* 格子整體居中 */
 }
 
+/* 每排格子的容器 */
+.letter-row {
+  display: flex;
+  justify-content: center; /* 排內格子居中 */
+  gap: 0px; /* 告別分開，格子邊對邊 */
+}
+
+/* 核心：新的格子樣式 */
 .letter-box { 
-  width: 40px; 
-  height: 50px; 
-  border: 2px solid #ddd; 
-  border-radius: 8px;
+  width: 42px; /* 稍微加寬 */
+  height: 52px; 
+  border: 1px solid #ddd; /* 稍微細一點的邊框 */
+  border-radius: 0px; /* 告別圓角，變成平直邊緣 */
   text-align: center; 
-  font-size: 24px; 
+  font-size: 26px; 
   font-weight: bold;
   outline: none;
   transition: all 0.2s ease;
   text-transform: lowercase;
+  margin: 0; /* 確保沒有任何間距 */
 }
 
-.letter-box:focus { border-color: #2196f3; box-shadow: 0 0 5px rgba(33, 150, 243, 0.4); }
+/* 左右兩端的格子樣式：加上半圓角，變成整體 */
+.letter-box:first-child {
+  border-radius: 8px 0 0 8px; /* 左側半圓角 */
+}
+.letter-box:last-child {
+  border-radius: 0 8px 8px 0; /* 右側半圓角 */
+}
+
+/* 若這排只有一個字母，就是全圓角 */
+.letter-box:only-child {
+  border-radius: 8px;
+}
+
+.letter-box:focus { border-color: #2196f3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.5); z-index: 10; /* 確保焦點框浮在上面 */ }
 .correct { color: #4caf50; border-color: #4caf50; background-color: #e8f5e9; }
 .wrong { color: #f44336; border-color: #f44336; background-color: #ffebee; }
 
-/* 按鈕控制列樣式 */
+/* 剩餘樣式保持不變 */
 .control-panel {
   display: flex;
   justify-content: center;
@@ -89,17 +113,7 @@ body {
 }
 .nav-btn:hover { background-color: #d5d5d5; }
 
-.success-msg {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 25px;
-  min-height: 24px;
-}
-.answer-msg {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 10px;
-  color: #333;
-}
+.success-msg { font-size: 18px; font-weight: bold; margin-top: 25px; min-height: 24px; }
+.answer-msg { font-size: 18px; font-weight: bold; margin-top: 10px; color: #333; }
 .correct-text { color: #4caf50; }
 .wrong-text { color: #f44336; }
