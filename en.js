@@ -29,7 +29,7 @@ groupSelect.addEventListener('change', (e) => {
   loadQuestion(currentWordIndex);
 });
 
-// 核心：智慧換行的邏輯
+// 核心：改為生成單一輸入框
 function loadQuestion(index) {
   container.innerHTML = '';
   msgElement.innerText = '';
@@ -40,93 +40,55 @@ function loadQuestion(index) {
   progressText.innerText = `第 ${index + 1} 題 / 共 ${wordDictionary.length} 題`;
 
   const currentData = wordDictionary[index];
-  const answer = currentData.english.toLowerCase();
   hintElement.innerText = currentData.chinese;
 
-  // 1. 計算智慧換行：每排最多放多少字母 (根據介面寬度決定)
-  const maxLettersPerRow = 8; // 每排最大字母數
-  const rowsData = [];
-  for (let i = 0; i < answer.length; i += maxLettersPerRow) {
-    rowsData.push(answer.substring(i, i + maxLettersPerRow));
-  }
-
-  // 2. 生成多排格子
-  let globalInputIndex = 0; // 全局索引，用於定位所有輸入框
-  rowsData.forEach((rowData, rowIndex) => {
-    const rowDiv = document.createElement('div');
-    rowDiv.className = 'letter-row';
-    
-    for (let j = 0; j < rowData.length; j++) {
-      const input = document.createElement('input');
-      input.type = "text";
-      input.maxLength = 1;
-      input.className = 'letter-box';
-      input.dataset.row = rowIndex;
-      input.dataset.index = globalInputIndex; // 使用全局索引，方便左右移動焦點
-      
-      input.addEventListener('input', (e) => {
-          const val = e.target.value;
-          const currentGlobalIdx = parseInt(e.target.dataset.index);
-          const allInputs = Array.from(container.querySelectorAll('.letter-box'));
-          
-          if (val !== '' && allInputs[currentGlobalIdx + 1]) {
-              allInputs[currentGlobalIdx + 1].focus(); // 自動移至全局下一個格子 (支援跨排)
-          }
-      });
-
-      input.addEventListener('keydown', (e) => {
-          const currentGlobalIdx = parseInt(e.target.dataset.index);
-          const allInputs = Array.from(container.querySelectorAll('.letter-box'));
-
-          if (e.key === 'Backspace' && e.target.value === '' && currentGlobalIdx > 0) {
-              allInputs[currentGlobalIdx - 1].focus(); // 自動退回全局上一個格子 (支援跨排)
-          }
-          if (e.key === 'Enter' && checkBtn.style.display !== 'none') {
-              checkBtn.click();
-          }
-      });
-
-      rowDiv.appendChild(input);
-      globalInputIndex++;
-    }
-    container.appendChild(rowDiv);
-  });
+  // 建立單一普通輸入框
+  const input = document.createElement('input');
+  input.type = "text";
+  input.className = 'word-input';
+  input.placeholder = "請輸入英文..."; // 加入浮水印提示
+  input.autocomplete = "off"; // 關閉瀏覽器自動填入
+  input.spellcheck = false; // 關閉拼字檢查（避免默寫時作弊）
   
-  // 核心：頁面載入後自動聚焦第一個格子
-  const firstInput = container.querySelector('.letter-box');
-  if(firstInput) {
-    firstInput.focus();
-  }
+  // 監聽 Enter 鍵直接送出
+  input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && checkBtn.style.display !== 'none') {
+          checkBtn.click();
+      }
+  });
+
+  container.appendChild(input);
+  
+  // 頁面載入後自動聚焦，方便直接打字
+  setTimeout(() => input.focus(), 10);
 }
 
+// 核心：改為對比整段文字
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
   const answer = currentData.english.toLowerCase();
-  const allInputs = Array.from(container.querySelectorAll('.letter-box'));
-  let isAllCorrect = true;
+  
+  // 取得唯一的那一個輸入框
+  const input = container.querySelector('.word-input');
+  // 取得使用者的輸入（轉小寫，並去除前後多餘空白）
+  const userInput = input.value.trim().toLowerCase();
 
-  allInputs.forEach((input, idx) => {
-      const val = input.value.toLowerCase();
-      if (val === answer[idx]) {
-          input.className = 'letter-box correct';
-      } else {
-          input.className = 'letter-box wrong';
-          isAllCorrect = false;
-      }
-      input.disabled = true; 
-  });
+  let isCorrect = (userInput === answer);
 
-  checkBtn.style.display = 'none';
-  retryBtn.style.display = 'inline-block';
-
-  if (isAllCorrect) {
+  if (isCorrect) {
+      input.className = 'word-input correct';
       msgElement.innerText = "🎉 完全正確！";
       msgElement.className = "success-msg correct-text";
   } else {
-      msgElement.innerText = "❌ 有些字母拼錯囉！";
+      input.className = 'word-input wrong';
+      msgElement.innerText = "❌ 拼錯囉！";
       msgElement.className = "success-msg wrong-text";
-      correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50; letter-spacing: 2px;">${answer}</span>`;
+      correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50;">${answer}</span>`;
   }
+  
+  input.disabled = true; // 檢查後鎖定輸入框
+  checkBtn.style.display = 'none';
+  retryBtn.style.display = 'inline-block';
 });
 
 retryBtn.addEventListener('click', () => loadQuestion(currentWordIndex));
