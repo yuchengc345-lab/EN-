@@ -11,6 +11,18 @@ const nextBtn = document.getElementById('nextBtn');
 const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 const groupSelect = document.getElementById('groupSelect');
+const speakBtn = document.getElementById('speakBtn'); // 🌟 新增：綁定喇叭按鈕
+
+// 🌟 核心新功能：瀏覽器語音合成發音
+function speakWord(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // 停止上一句還沒唸完的發音
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US'; // 設定為美式英文
+    utterance.rate = 0.85;    // 語速調慢一點點 (0.85倍速)
+    window.speechSynthesis.speak(utterance);
+  }
+}
 
 function initSelect() {
   let currentCategory = "";
@@ -52,8 +64,11 @@ function loadQuestion(index) {
 
   const currentData = wordDictionary[index];
   
-  // 🌟 核心修改：顯示英文，並在旁邊用小字顯示中文
+  // 看打模式特有：顯示英文，並在旁邊用小字顯示中文
   hintElement.innerHTML = `<span style="color:#2196f3; font-family:monospace; font-size:26px;">${currentData.english}</span> <br><span style="font-size: 16px; color: #888;">(${currentData.chinese})</span>`;
+
+  // 🌟 新增：載入題目時，自動唸出英文單字！
+  speakWord(currentData.english);
 
   const input = document.createElement('input');
   input.type = "text";
@@ -79,6 +94,15 @@ function loadQuestion(index) {
   container.appendChild(input);
   setTimeout(() => input.focus(), 10);
 }
+
+// 🌟 新增：點擊喇叭按鈕時，重新唸一次單字
+speakBtn.addEventListener('click', () => {
+  const currentData = wordDictionary[currentWordIndex];
+  speakWord(currentData.english);
+  // 點擊完喇叭後，把焦點還給輸入框，方便繼續打字
+  const input = container.querySelector('.word-input');
+  if(input) input.focus();
+});
 
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
