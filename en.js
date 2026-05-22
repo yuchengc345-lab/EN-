@@ -1,37 +1,26 @@
-// ==========================================
-// 📁 模拟你的“独立题库文件” (Data)
-// 以后你只需要维护这个列表，底下的代码不用管
-// ==========================================
 const wordDictionary = [
-  { chinese: "苹果", english: "apple" },
+  { chinese: "蘋果", english: "apple" },
   { chinese: "香蕉", english: "banana" },
-  { chinese: "奇妙的；极好的", english: "wonderful" }
+  { chinese: "奇妙的；極好的", english: "wonderful" }
 ];
 
-
-// ==========================================
-// ⚙️ 核心运行逻辑 (Logic)
-// ==========================================
-
-let currentWordIndex = 0; // 记录当前正在背第几个词
+let currentWordIndex = 0;
 const container = document.getElementById('inputContainer');
 const hintElement = document.getElementById('chineseHint');
 const msgElement = document.getElementById('successMessage');
+const checkBtn = document.getElementById('checkBtn');
+const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 
-// 核心函数：加载题目
 function loadQuestion(index) {
-  // 清空上一个题目的内容
   container.innerHTML = '';
   msgElement.innerText = '';
-  
-  // 获取当前的中文和英文数据
+  correctAnswerMsg.innerText = ''; 
+  checkBtn.disabled = false; // 恢復按鈕可點擊
+
   const currentData = wordDictionary[index];
   const answer = currentData.english.toLowerCase();
-  
-  // 更新界面的中文提示
   hintElement.innerText = currentData.chinese;
 
-  // 根据英文单词的长度，动态生成输入框
   for (let i = 0; i < answer.length; i++) {
       const input = document.createElement('input');
       input.type = "text";
@@ -39,58 +28,77 @@ function loadQuestion(index) {
       input.className = 'letter-box';
       input.dataset.index = i; 
       
-      // 监听用户的每一次键盘输入
+      // 監聽輸入：現在只負責自動跳到下一格，不檢查對錯
       input.addEventListener('input', (e) => {
-          const val = e.target.value.toLowerCase();
+          const val = e.target.value;
           const idx = parseInt(e.target.dataset.index);
-
-          // 校验对错
-          if (val === answer[idx]) {
-              e.target.className = 'letter-box correct';
-              
-              // 自动跳到下一个格子
-              if (container.children[idx + 1]) {
-                  container.children[idx + 1].focus();
-              } else {
-                  // 如果没有下一个格子了，说明这个单词拼完了！
-                  checkWordComplete(answer);
-              }
-          } else {
-              e.target.className = 'letter-box wrong';
-              // 小细节：如果输错了，自动清空，强迫用户重新输入这个字母
-              setTimeout(() => { e.target.value = ''; }, 200);
+          if (val !== '' && container.children[idx + 1]) {
+              container.children[idx + 1].focus();
           }
       });
+
+      // 監聽鍵盤：支援按 Backspace 退回上一格，按 Enter 直接送出
+      input.addEventListener('keydown', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
+              container.children[idx - 1].focus();
+          }
+          if (e.key === 'Enter') {
+              checkBtn.click();
+          }
+      });
+
       container.appendChild(input);
   }
   
-  // 题目加载后，自动聚焦到第一个框
   if(container.children.length > 0) {
       container.children[0].focus();
   }
 }
 
-// 检查整个单词是否拼写完成
-function checkWordComplete(answer) {
-  // 检查所有框是不是都被填满了且填对了（带有 correct class）
-  const allInputs = Array.from(container.children);
-  const isAllCorrect = allInputs.every(input => input.classList.contains('correct'));
+// 點擊「確定」按鈕的檢查邏輯
+checkBtn.addEventListener('click', () => {
+  const currentData = wordDictionary[currentWordIndex];
+  const answer = currentData.english.toLowerCase();
+  const inputs = Array.from(container.children);
+  
+  let isAllCorrect = true;
 
+  // 檢查每一個字母
+  inputs.forEach((input, idx) => {
+      const val = input.value.toLowerCase();
+      if (val === answer[idx]) {
+          input.className = 'letter-box correct';
+      } else {
+          input.className = 'letter-box wrong';
+          isAllCorrect = false;
+      }
+      input.disabled = true; // 檢查後鎖定輸入框，不讓使用者修改
+  });
+
+  checkBtn.disabled = true; // 鎖定按鈕
+
+  // 顯示結果與正確答案
   if (isAllCorrect) {
-      msgElement.innerText = "🎉 拼写正确！1秒后进入下一题...";
-      
-      // 延迟1秒后，加载下一个单词
-      setTimeout(() => {
-          currentWordIndex++;
-          // 如果词库背完了，循环回第一个
-          if (currentWordIndex >= wordDictionary.length) {
-              currentWordIndex = 0; 
-              alert("恭喜你，所有单词已完成！重新开始。");
-          }
-          loadQuestion(currentWordIndex);
-      }, 1000);
+      msgElement.innerText = "🎉 完全正確！";
+      msgElement.className = "success-msg correct-text";
+  } else {
+      msgElement.innerText = "❌ 有些字母拼錯囉！";
+      msgElement.className = "success-msg wrong-text";
+      correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50; letter-spacing: 2px;">${answer}</span>`;
   }
-}
 
-// 页面一加载，马上执行第一题
+  msgElement.innerText += " (5秒後進入下一題...)";
+
+  // 5秒後進入下一題
+  setTimeout(() => {
+      currentWordIndex++;
+      if (currentWordIndex >= wordDictionary.length) {
+          currentWordIndex = 0; // 背完一輪重新開始
+      }
+      loadQuestion(currentWordIndex);
+  }, 5000);
+});
+
+// 啟動第一題
 loadQuestion(currentWordIndex);
