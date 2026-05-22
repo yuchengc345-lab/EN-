@@ -1,6 +1,6 @@
-let currentGroupIndex = 0; // 目前選擇的群組
-let currentWordIndex = 0;  // 目前選擇群組中的第幾題
-let wordDictionary = wordGroups[currentGroupIndex].words; // 載入目前群組的單字
+let currentGroupIndex = 0; 
+let currentWordIndex = 0;  
+let wordDictionary = wordGroups[currentGroupIndex].words; 
 
 const container = document.getElementById('inputContainer');
 const hintElement = document.getElementById('chineseHint');
@@ -13,7 +13,6 @@ const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
 const groupSelect = document.getElementById('groupSelect');
 
-// 初始化下拉選單
 function initSelect() {
   wordGroups.forEach((group, index) => {
     const option = document.createElement('option');
@@ -23,14 +22,14 @@ function initSelect() {
   });
 }
 
-// 當使用者切換下拉選單時觸發
 groupSelect.addEventListener('change', (e) => {
   currentGroupIndex = parseInt(e.target.value);
   wordDictionary = wordGroups[currentGroupIndex].words;
-  currentWordIndex = 0; // 換組時，從第一題重新開始
+  currentWordIndex = 0; 
   loadQuestion(currentWordIndex);
 });
 
+// 核心：智慧換行的邏輯
 function loadQuestion(index) {
   container.innerHTML = '';
   msgElement.innerText = '';
@@ -44,49 +43,69 @@ function loadQuestion(index) {
   const answer = currentData.english.toLowerCase();
   hintElement.innerText = currentData.chinese;
 
-  // 動態生成輸入框 (包含空白鍵和括號的處理)
-  for (let i = 0; i < answer.length; i++) {
+  // 1. 計算智慧換行：每排最多放多少字母 (根據介面寬度決定)
+  const maxLettersPerRow = 8; // 每排最大字母數
+  const rowsData = [];
+  for (let i = 0; i < answer.length; i += maxLettersPerRow) {
+    rowsData.push(answer.substring(i, i + maxLettersPerRow));
+  }
+
+  // 2. 生成多排格子
+  let globalInputIndex = 0; // 全局索引，用於定位所有輸入框
+  rowsData.forEach((rowData, rowIndex) => {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'letter-row';
+    
+    for (let j = 0; j < rowData.length; j++) {
       const input = document.createElement('input');
       input.type = "text";
       input.maxLength = 1;
       input.className = 'letter-box';
-      input.dataset.index = i; 
-      
-      // 若答案中有空白或括號，可以直接給予特定樣式或預填，這裡為了統一練習標準，讓使用者自行輸入
+      input.dataset.row = rowIndex;
+      input.dataset.index = globalInputIndex; // 使用全局索引，方便左右移動焦點
       
       input.addEventListener('input', (e) => {
           const val = e.target.value;
-          const idx = parseInt(e.target.dataset.index);
-          if (val !== '' && container.children[idx + 1]) {
-              container.children[idx + 1].focus();
+          const currentGlobalIdx = parseInt(e.target.dataset.index);
+          const allInputs = Array.from(container.querySelectorAll('.letter-box'));
+          
+          if (val !== '' && allInputs[currentGlobalIdx + 1]) {
+              allInputs[currentGlobalIdx + 1].focus(); // 自動移至全局下一個格子 (支援跨排)
           }
       });
 
       input.addEventListener('keydown', (e) => {
-          const idx = parseInt(e.target.dataset.index);
-          if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
-              container.children[idx - 1].focus();
+          const currentGlobalIdx = parseInt(e.target.dataset.index);
+          const allInputs = Array.from(container.querySelectorAll('.letter-box'));
+
+          if (e.key === 'Backspace' && e.target.value === '' && currentGlobalIdx > 0) {
+              allInputs[currentGlobalIdx - 1].focus(); // 自動退回全局上一個格子 (支援跨排)
           }
           if (e.key === 'Enter' && checkBtn.style.display !== 'none') {
               checkBtn.click();
           }
       });
 
-      container.appendChild(input);
-  }
+      rowDiv.appendChild(input);
+      globalInputIndex++;
+    }
+    container.appendChild(rowDiv);
+  });
   
-  if(container.children.length > 0) {
-      container.children[0].focus();
+  // 核心：頁面載入後自動聚焦第一個格子
+  const firstInput = container.querySelector('.letter-box');
+  if(firstInput) {
+    firstInput.focus();
   }
 }
 
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
   const answer = currentData.english.toLowerCase();
-  const inputs = Array.from(container.children);
+  const allInputs = Array.from(container.querySelectorAll('.letter-box'));
   let isAllCorrect = true;
 
-  inputs.forEach((input, idx) => {
+  allInputs.forEach((input, idx) => {
       const val = input.value.toLowerCase();
       if (val === answer[idx]) {
           input.className = 'letter-box correct';
