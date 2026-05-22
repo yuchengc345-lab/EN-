@@ -89,3 +89,34 @@ body {
 .answer-msg { font-size: 18px; font-weight: bold; margin-top: 10px; color: #333; }
 .correct-text { color: #4caf50; }
 .wrong-text { color: #f44336; }
+/* --- 模式切換按鈕樣式 --- */
+.mode-switch {
+  display: flex;
+  justify-content: center;
+  background-color: #f0f2f5;
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #666;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.mode-btn:hover {
+  background-color: #e4e6e9;
+}
+
+.mode-btn.active {
+  background-color: #ffffff;
+  color: #2196f3;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
