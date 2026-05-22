@@ -12,6 +12,13 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
+  width: 450px;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
 }
 
 .question-card {
@@ -30,6 +37,7 @@ body {
   justify-content: center;
   gap: 8px; 
   margin-top: 20px; 
+  margin-bottom: 25px;
 }
 
 .letter-box { 
@@ -42,45 +50,53 @@ body {
   font-weight: bold;
   outline: none;
   transition: all 0.2s ease;
-  text-transform: lowercase; /* 强制显示为小写 */
+  text-transform: lowercase;
 }
 
-/* 各种交互状态的颜色反馈 */
 .letter-box:focus { border-color: #2196f3; box-shadow: 0 0 5px rgba(33, 150, 243, 0.4); }
 .correct { color: #4caf50; border-color: #4caf50; background-color: #e8f5e9; }
 .wrong { color: #f44336; border-color: #f44336; background-color: #ffebee; }
 
-.success-msg {
-  color: #4caf50;
-  font-weight: bold;
+/* 按鈕控制列樣式 */
+.control-panel {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   margin-top: 20px;
-  min-height: 24px;
 }
-/* ... (保留你原本上面所有的 CSS) ... */
 
-/* 新增的按鈕樣式 */
 .check-btn {
-  padding: 10px 25px;
-  font-size: 18px;
+  padding: 10px 20px;
+  font-size: 16px;
   background-color: #2196f3;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
   font-weight: bold;
 }
-.check-btn:hover {
-  background-color: #1976d2;
-}
-.check-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
+.check-btn:hover { background-color: #1976d2; }
 
-/* 答案提示文字樣式 */
+.nav-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.nav-btn:hover { background-color: #d5d5d5; }
+
+.success-msg {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 25px;
+  min-height: 24px;
+}
 .answer-msg {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-top: 10px;
   color: #333;
