@@ -1,10 +1,7 @@
-const wordDictionary = [
-  { chinese: "蘋果", english: "apple" },
-  { chinese: "香蕉", english: "banana" },
-  { chinese: "奇妙的；極好的", english: "wonderful" }
-];
+let currentGroupIndex = 0; // 目前選擇的群組
+let currentWordIndex = 0;  // 目前選擇群組中的第幾題
+let wordDictionary = wordGroups[currentGroupIndex].words; // 載入目前群組的單字
 
-let currentWordIndex = 0;
 const container = document.getElementById('inputContainer');
 const hintElement = document.getElementById('chineseHint');
 const msgElement = document.getElementById('successMessage');
@@ -14,31 +11,48 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const progressText = document.getElementById('progressText');
 const correctAnswerMsg = document.getElementById('correctAnswerMsg');
+const groupSelect = document.getElementById('groupSelect');
+
+// 初始化下拉選單
+function initSelect() {
+  wordGroups.forEach((group, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.innerText = group.groupName;
+    groupSelect.appendChild(option);
+  });
+}
+
+// 當使用者切換下拉選單時觸發
+groupSelect.addEventListener('change', (e) => {
+  currentGroupIndex = parseInt(e.target.value);
+  wordDictionary = wordGroups[currentGroupIndex].words;
+  currentWordIndex = 0; // 換組時，從第一題重新開始
+  loadQuestion(currentWordIndex);
+});
 
 function loadQuestion(index) {
-  // 清空狀態
   container.innerHTML = '';
   msgElement.innerText = '';
   correctAnswerMsg.innerText = ''; 
-  
-  // 顯示/隱藏對應按鈕
   checkBtn.style.display = 'inline-block';
   retryBtn.style.display = 'none';
 
-  // 更新進度文字
   progressText.innerText = `第 ${index + 1} 題 / 共 ${wordDictionary.length} 題`;
 
   const currentData = wordDictionary[index];
   const answer = currentData.english.toLowerCase();
   hintElement.innerText = currentData.chinese;
 
-  // 生成輸入框
+  // 動態生成輸入框 (包含空白鍵和括號的處理)
   for (let i = 0; i < answer.length; i++) {
       const input = document.createElement('input');
       input.type = "text";
       input.maxLength = 1;
       input.className = 'letter-box';
       input.dataset.index = i; 
+      
+      // 若答案中有空白或括號，可以直接給予特定樣式或預填，這裡為了統一練習標準，讓使用者自行輸入
       
       input.addEventListener('input', (e) => {
           const val = e.target.value;
@@ -66,7 +80,6 @@ function loadQuestion(index) {
   }
 }
 
-// 「確定送出」檢查邏輯
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
   const answer = currentData.english.toLowerCase();
@@ -81,10 +94,9 @@ checkBtn.addEventListener('click', () => {
           input.className = 'letter-box wrong';
           isAllCorrect = false;
       }
-      input.disabled = true; // 檢查後鎖定
+      input.disabled = true; 
   });
 
-  // 切換按鈕狀態：藏起確定按鈕，顯示重新練習按鈕
   checkBtn.style.display = 'none';
   retryBtn.style.display = 'inline-block';
 
@@ -98,42 +110,26 @@ checkBtn.addEventListener('click', () => {
   }
 });
 
-// 「重新練習」按鈕點擊
-retryBtn.addEventListener('click', () => {
-  loadQuestion(currentWordIndex);
-});
+retryBtn.addEventListener('click', () => loadQuestion(currentWordIndex));
 
-// 「上一題」按鈕點擊
 prevBtn.addEventListener('click', () => {
   currentWordIndex--;
-  if (currentWordIndex < 0) {
-      currentWordIndex = wordDictionary.length - 1; // 循環回最後一題
-  }
+  if (currentWordIndex < 0) currentWordIndex = wordDictionary.length - 1;
   loadQuestion(currentWordIndex);
 });
 
-// 「下一題」按鈕點擊
 nextBtn.addEventListener('click', () => {
   currentWordIndex++;
-  if (currentWordIndex >= wordDictionary.length) {
-      currentWordIndex = 0; // 循環回第一題
-  }
+  if (currentWordIndex >= wordDictionary.length) currentWordIndex = 0;
   loadQuestion(currentWordIndex);
 });
 
-// 🚀 全域鍵盤監聽：支援電腦左右鍵切換題目
 document.addEventListener('keydown', (e) => {
-  // 檢查目前光標是不是在輸入框裡，如果是，就不觸發左右鍵換題（避免打字時誤觸）
-  if (document.activeElement.tagName === 'INPUT') {
-      return; 
-  }
-  
-  if (e.key === 'ArrowLeft') {
-      prevBtn.click();
-  } else if (e.key === 'ArrowRight') {
-      nextBtn.click();
-  }
+  if (document.activeElement.tagName === 'INPUT') return; 
+  if (e.key === 'ArrowLeft') prevBtn.click();
+  else if (e.key === 'ArrowRight') nextBtn.click();
 });
 
-// 啟動第一題
+// 初始化啟動
+initSelect();
 loadQuestion(currentWordIndex);
