@@ -104,11 +104,23 @@ speakBtn.addEventListener('click', () => {
 
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
-  const answer = currentData.english.toLowerCase();
+  const rawAnswer = currentData.english; // 保留原始完整答案用來顯示
   const input = container.querySelector('.word-input');
-  const userInput = input.value.trim().toLowerCase();
+  const userInput = input.value;
 
-  let isCorrect = (userInput === answer);
+  // 🌟 核心升級：超智慧寬容比對引擎
+  // 1. 將答案用分號 (;)、逗號 (,) 或左括號 (() 切分成多個可能的正確片段
+  const possibleAnswers = rawAnswer.split(/[,;(]/);
+  
+  // 2. 建立清理函數：去除所有空白、句號、斜線、連字號、右括號，並全部轉小寫
+  const cleanText = (text) => text.replace(/[\s\.\/\-\)]/g, '').toLowerCase();
+  const cleanInput = cleanText(userInput);
+
+  // 3. 比對：只要使用者的輸入符合其中「任何一個」片段，就算答對！
+  let isCorrect = possibleAnswers.some(part => {
+      const cleanPart = cleanText(part);
+      return cleanPart !== '' && cleanPart === cleanInput;
+  });
 
   if (isCorrect) {
       input.className = 'word-input correct';
@@ -120,11 +132,11 @@ checkBtn.addEventListener('click', () => {
       input.className = 'word-input wrong';
       msgElement.innerText = "❌ 拼錯囉！直接打字覆蓋，然後按 Enter 再試一次吧！";
       msgElement.className = "success-msg wrong-text";
-      correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50;">${answer}</span>`;
+      // 顯示完整的原始答案給使用者看
+      correctAnswerMsg.innerHTML = `正確答案是：<span style="color:#4caf50;">${rawAnswer}</span>`;
       input.select(); 
   }
 });
-
 prevBtn.addEventListener('click', () => {
   currentWordIndex--;
   if (currentWordIndex < 0) currentWordIndex = wordDictionary.length - 1;
