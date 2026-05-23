@@ -67,8 +67,6 @@ function loadQuestion(index) {
   // 看打模式特有：顯示英文，並在旁邊用小字顯示中文
   hintElement.innerHTML = `<span style="color:#2196f3; font-family:monospace; font-size:26px;">${currentData.english}</span> <br><span style="font-size: 16px; color: #888;">(${currentData.chinese})</span>`;
 
-  // 🌟 新增：載入題目時，自動唸出英文單字！
-  speakWord(currentData.english);
 
   const input = document.createElement('input');
   input.type = "text";
