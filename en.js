@@ -67,9 +67,6 @@ function loadQuestion(index) {
   const currentData = wordDictionary[index];
   hintElement.innerText = currentData.chinese;
 
-  // 🌟 新增：載入題目時，自動唸出英文單字！
-  speakWord(currentData.english);
-
   const input = document.createElement('input');
   input.type = "text";
   input.className = 'word-input';
