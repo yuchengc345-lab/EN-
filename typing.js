@@ -104,11 +104,19 @@ speakBtn.addEventListener('click', () => {
 
 checkBtn.addEventListener('click', () => {
   const currentData = wordDictionary[currentWordIndex];
-  const answer = currentData.english.toLowerCase();
+  const rawAnswer = currentData.english;
   const input = container.querySelector('.word-input');
-  const userInput = input.value.trim().toLowerCase();
+  const userInput = input.value;
 
-  let isCorrect = (userInput === answer);
+  // 🌟 核心升級：超智慧寬容比對引擎
+  const possibleAnswers = rawAnswer.split(/[,;(]/);
+  const cleanText = (text) => text.replace(/[\s\.\/\-\)]/g, '').toLowerCase();
+  const cleanInput = cleanText(userInput);
+
+  let isCorrect = possibleAnswers.some(part => {
+      const cleanPart = cleanText(part);
+      return cleanPart !== '' && cleanPart === cleanInput;
+  });
 
   if (isCorrect) {
       input.className = 'word-input correct';
