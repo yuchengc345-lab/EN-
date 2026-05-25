@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>醫護英文情境判斷練習</title>
+  <link rel="stylesheet" href="en.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <h2>🏥 醫護英文情境判斷</h2>
+    
+    <div class="mode-switch">
+      <a href="index.html" class="mode-btn">🎯 默寫</a>
+      <a href="typing.html" class="mode-btn">⌨️ 看打</a>
+      <a href="scenario.html" class="mode-btn active">🏥 情境</a>
+    </div>
+
+    <div class="group-selector" style="margin-bottom: 20px;">
+      <label for="groupSelect" style="font-weight: bold; font-size: 16px;">📂 選擇題庫：</label>
+      <select id="groupSelect" style="padding: 5px; font-size: 16px; border-radius: 5px;"></select>
+    </div>
+
+    <div id="progressText" class="progress-text">題目載入中...</div>
+    
+    <div class="question-card">
+      <span class="label">臨床情境：</span>
+      <br>
+      <span id="chineseHint" class="hint-text" style="font-size: 18px; display: inline-block; margin-top: 10px; text-align: left; line-height: 1.5;">正在載入題目...</span>
+      <button id="speakBtn" class="speak-btn" title="播放發音">🔊</button>
+    </div>
+
+    <div id="inputContainer" class="input-container"></div>
+    
+    <div class="control-panel">
+      <button id="prevBtn" class="nav-btn">⬅️ 上一題</button>
+      <button id="checkBtn" class="check-btn">確定送出</button>
+      <button id="nextBtn" class="nav-btn">下一題 ➡️</button>
+    </div>
+
+    <p id="successMessage" class="success-msg"></p>
+    <p id="correctAnswerMsg" class="answer-msg"></p>
+  </div>
+
+  <script src="words.js"></script>
+  <script src="scenario.js"></script>
+</body>
+</html>
