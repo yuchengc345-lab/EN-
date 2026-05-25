@@ -1,5 +1,32 @@
-// words.js - 專屬醫護英文題庫檔
 const wordGroups = [
+  // ==========================================
+  // 📚 第一部分：三年內外英文 (共 15 組)
+  // ==========================================
+  { category: "三年內外英文", groupName: "心血管系統 1", words: [
+      { english: "angina pectoris", chinese: "心絞痛", scenario: "病人主訴胸骨後方有壓迫性疼痛，並輻射至左臂及下巴，服用耐絞寧 (NTG) 後症狀可緩解。" }, 
+      { english: "arrhythmia", chinese: "心律不整", scenario: "護理師在測量生命徵象時，發現病人的橈動脈跳動忽快忽慢，節律極度不規則。" }, 
+      { english: "arteriosclerosis", chinese: "動脈硬化", scenario: "長期高血壓導致病人的血管壁增厚、變硬，失去原本的彈性。" }, 
+      { english: "asystole", chinese: "心搏停止", scenario: "急救室的生理監視器發出長音警報，心電圖螢幕上顯示為一條平滑的直線。" }, 
+      { english: "angiography", chinese: "血管攝影", scenario: "醫師從病人的鼠蹊部置入導管，並注入顯影劑，以在 X 光下觀察冠狀動脈是否有阻塞。" }, 
+      { english: "aortic dissection", chinese: "主動脈剝離", scenario: "急診病人突發如撕裂般的劇烈胸背痛，血壓極高，電腦斷層顯示血管內膜破裂，血液流入中層。" }, 
+      { english: "aneurysm", chinese: "動脈瘤", scenario: "超音波檢查發現病人的腹主動脈壁局部異常擴大，形成了一個像氣球般脆弱的囊狀物。" }, 
+      { english: "cardiopulmonary resuscitation (CPR)", chinese: "心肺復甦術", scenario: "當發現病人無意識且無正常呼吸時，立刻進行胸部按壓與人工呼吸的急救技術。" }, 
+      { english: "cellulitis", chinese: "蜂窩性組織炎", scenario: "病人的小腿有一處傷口未處理，幾天後患部出現大範圍的紅、腫、熱、痛，並伴隨發燒。" }, 
+      { english: "ventricular tachycardia (VT)", chinese: "心室心搏過速", scenario: "心電圖顯示寬大且快速的 QRS 波（心跳速率大於100次/分），病人出現心悸及頭暈，需立即處理。" }
+  ]},
+  { category: "三年內外英文", groupName: "心血管與皮膚", words: [
+      { english: "defibrillation", chinese: "去顫術", scenario: "病人發生心室纖維顫動 (VF) 時，醫療團隊使用電擊器給予直流電，以恢復正常心律。" }, 
+      { english: "dermatitis", chinese: "皮膚炎", scenario: "病人接觸到過敏原後，皮膚出現發紅、發癢及脫屑等發炎反應。" }, 
+      { english: "debridement", chinese: "清創術", scenario: "整形外科醫師在手術室為燒燙傷病人移除壞死及受感染的組織，以利傷口癒合。" }, 
+      { english: "electrocardiogram (EKG)", chinese: "心電圖", scenario: "護理師在病人的胸前與四肢貼上電極片，用來記錄心臟的電氣活動。" }, 
+      { english: "eczema", chinese: "濕疹", scenario: "孩童的關節屈側出現劇烈搔癢的紅疹，且有滲液及結痂，醫師診斷為異位性皮膚疾病。" }, 
+      { english: "gangrene", chinese: "壞疽", scenario: "糖尿病病人的腳趾因為長期血液循環不良，組織發生缺血性壞死並變黑。" }, 
+      { english: "herpes", chinese: "疱疹", scenario: "病人最近壓力大、免疫力下降，嘴角出現了群聚的水泡，伴隨刺痛感。" }, 
+      { english: "hyperlipidemia", chinese: "高血脂", scenario: "抽血報告顯示病人的總膽固醇與三酸甘油酯數值皆遠高於正常標準。" }, 
+      { english: "myocardial infarction (MI)", chinese: "心肌梗塞", scenario: "冠狀動脈完全阻塞，導致心肌缺血壞死，病人出現劇烈胸痛且伴隨冒冷汗及呼吸困難。" }, 
+      { english: "necrosis", chinese: "壞死", scenario: "因為長時間的壓迫，病患尾椎處的壓瘡傷口深處出現了沒有活力的發黑組織。" }
+  ]},
+  // ... 請保留你原本的 第 3 組 到 第 30 組 ...
   // ==========================================
   // 📚 第一部分：三年內外英文 (共 15 組)
   // ==========================================
