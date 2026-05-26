@@ -124,4 +124,50 @@ const wordGroups = [
   { category: "二年基護英文", groupName: "給藥途徑 2", words: [
       { english: "intravenous(I. V.) injection", chinese: "靜脈注射" }, { english: "oculus dexter, right eye; O. D.", chinese: "右眼" }, { english: "oculus sinister, left eye; O. S.", chinese: "左眼" }, { english: "oculus uterque, both eyes; O. U.", chinese: "雙眼" }, { english: "per os, by mouth; P.O.", chinese: "口服" }, { english: "subcutaneous (S. C.) injection", chinese: "皮下注射" }, { english: "sublingual; S. L.", chinese: "舌下" }, { english: "aqua", chinese: "水溶性" }, { english: "capsule", chinese: "膠囊" }, { english: "dilute", chinese: "稀釋" }
   ]}
-];
+// (這行是你原本最後一組的大括號) 
+  },
+  
+  // ==========================================
+  // 📚 第三部分：5/26英文test (共 3 組)
+  // ==========================================
+  { category: "5/26英文test", groupName: "病歷術語 1 (症狀與徵象)", words: [
+      { english: "acute onset headache", chinese: "急性頭痛發作" },
+      { english: "right side weakness (hemiparesis)", chinese: "右側肢體無力（輕偏癱）" },
+      { english: "severe vomiting", chinese: "嚴重的嘔吐" },
+      { english: "elevated BP", chinese: "血壓升高" },
+      { english: "consciousness was clear", chinese: "意識清楚" },
+      { english: "muscle strength", chinese: "肌肉力量" },
+      // 💡 昏迷指數太長了，我幫你把細節移到中文提示裡，這樣看打時比較合理
+      { english: "Glasgow Coma Scale (GCS)", chinese: "格拉斯哥昏迷指數 (E4V5M6：張眼4分、語言5分、運動6分)" },
+      { english: "dizziness", chinese: "頭暈" },
+      { english: "diplopia (double vision)", chinese: "複視" },
+      { english: "memory impairment", chinese: "記憶障礙" }
+  ]},
+  { category: "5/26英文test", groupName: "病歷術語 2 (病史、診斷與治療)", words: [
+      { english: "slurred speech", chinese: "說話模糊" },
+      { english: "dysphagia", chinese: "吞嚥困難" },
+      { english: "choking", chinese: "嗆到" },
+      { english: "atrial fibrillation (Af)", chinese: "心房纖維顫動" },
+      { english: "hyperlipidemia", chinese: "高血脂" },
+      { english: "hypertension (HTN / HT)", chinese: "高血壓" },
+      { english: "an episode of syncope", chinese: "有一次暈厥的現象" },
+      { english: "brain computed tomography (CT)", chinese: "腦部電腦斷層掃描" },
+      { english: "recent left hemisphere ischemic infarct", chinese: "最近出現的左半球腦缺血性梗塞" },
+      { english: "stroke (cerebrovascular accident, CVA)", chinese: "中風（腦血管意外）" },
+      { english: "anticoagulant", chinese: "抗凝劑" },
+      { english: "antihypertensive agent", chinese: "抗高血壓藥物" },
+      { english: "rehabilitation", chinese: "復健" }
+  ]},
+  { category: "5/26英文test", groupName: "一般與醫護字彙", words: [
+      { english: "be sure to", chinese: "一定；切記" },
+      { english: "monitor", chinese: "監控；監視" },
+      { english: "careful", chinese: "注意的；小心的" },
+      { english: "greasy", chinese: "油膩的" },
+      { english: "tempting", chinese: "誘人的；吸引人的" },
+      { english: "indeed", chinese: "確實；的確" },
+      { english: "consult", chinese: "諮詢；請教" },
+      { english: "certainly", chinese: "當然；必定" },
+      { english: "on schedule", chinese: "按照預定時間" },
+      { english: "pharmacy", chinese: "藥房" },
+      { english: "billing office", chinese: "批價處" }
+  ]}
