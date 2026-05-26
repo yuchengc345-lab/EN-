@@ -26,16 +26,6 @@ const wordGroups = [
       { english: "myocardial infarction (MI)", chinese: "心肌梗塞", scenario: "冠狀動脈完全阻塞，導致心肌缺血壞死，病人出現劇烈胸痛且伴隨冒冷汗及呼吸困難。" }, 
       { english: "necrosis", chinese: "壞死", scenario: "因為長時間的壓迫，病患尾椎處的壓瘡傷口深處出現了沒有活力的發黑組織。" }
   ]},
-  // ... 請保留你原本的 第 3 組 到 第 30 組 ...
-  // ==========================================
-  // 📚 第一部分：三年內外英文 (共 15 組)
-  // ==========================================
-  { category: "三年內外英文", groupName: "心血管系統 1", words: [
-      { english: "angina pectoris", chinese: "心絞痛" }, { english: "arrhythmia", chinese: "心律不整" }, { english: "arteriosclerosis", chinese: "動脈硬化" }, { english: "asystole", chinese: "心搏停止" }, { english: "angiography", chinese: "血管攝影" }, { english: "aortic dissection", chinese: "主動脈剝離" }, { english: "aneurysm", chinese: "動脈瘤" }, { english: "cardiopulmonary resuscitation (CPR)", chinese: "心肺復甦術" }, { english: "cellulitis", chinese: "蜂窩性組織炎" }, { english: "ventricular tachycardia (VT)", chinese: "心室心搏過速" }
-  ]},
-  { category: "三年內外英文", groupName: "心血管與皮膚", words: [
-      { english: "defibrillation", chinese: "去顫術" }, { english: "dermatitis", chinese: "皮膚炎" }, { english: "debridement", chinese: "清創術" }, { english: "electrocardiogram (EKG)", chinese: "心電圖" }, { english: "eczema", chinese: "濕疹" }, { english: "gangrene", chinese: "壞疽" }, { english: "herpes", chinese: "疱疹" }, { english: "hyperlipidemia", chinese: "高血脂" }, { english: "myocardial infarction (MI)", chinese: "心肌梗塞" }, { english: "necrosis", chinese: "壞死" }
-  ]},
   { category: "三年內外英文", groupName: "腎臟泌尿系統 1", words: [
       { english: "palpitation", chinese: "心悸" }, { english: "pitting edema", chinese: "凹陷性水腫" }, { english: "scabies", chinese: "疥瘡" }, { english: "swelling", chinese: "腫脹" }, { english: "syncope", chinese: "暈厥" }, { english: "acute glomerulonephritis (AGN)", chinese: "急性腎絲球腎炎" }, { english: "benign prostatic hyperplasia (BPH)", chinese: "良性前列腺增殖" }, { english: "chronic renal failure (CRF)", chinese: "慢性腎衰竭" }, { english: "end-stage renal disease (ESRD)", chinese: "末期腎病" }, { english: "hemodialysis (HD)", chinese: "血液透析" }
   ]},
@@ -123,10 +113,8 @@ const wordGroups = [
   ]},
   { category: "二年基護英文", groupName: "給藥途徑 2", words: [
       { english: "intravenous(I. V.) injection", chinese: "靜脈注射" }, { english: "oculus dexter, right eye; O. D.", chinese: "右眼" }, { english: "oculus sinister, left eye; O. S.", chinese: "左眼" }, { english: "oculus uterque, both eyes; O. U.", chinese: "雙眼" }, { english: "per os, by mouth; P.O.", chinese: "口服" }, { english: "subcutaneous (S. C.) injection", chinese: "皮下注射" }, { english: "sublingual; S. L.", chinese: "舌下" }, { english: "aqua", chinese: "水溶性" }, { english: "capsule", chinese: "膠囊" }, { english: "dilute", chinese: "稀釋" }
-  ]}
-// (這行是你原本最後一組的大括號) 
-  },
-  
+  ]},
+
   // ==========================================
   // 📚 第三部分：5/26英文test (共 3 組)
   // ==========================================
@@ -137,7 +125,6 @@ const wordGroups = [
       { english: "elevated BP", chinese: "血壓升高" },
       { english: "consciousness was clear", chinese: "意識清楚" },
       { english: "muscle strength", chinese: "肌肉力量" },
-      // 💡 昏迷指數太長了，我幫你把細節移到中文提示裡，這樣看打時比較合理
       { english: "Glasgow Coma Scale (GCS)", chinese: "格拉斯哥昏迷指數 (E4V5M6：張眼4分、語言5分、運動6分)" },
       { english: "dizziness", chinese: "頭暈" },
       { english: "diplopia (double vision)", chinese: "複視" },
@@ -171,3 +158,4 @@ const wordGroups = [
       { english: "pharmacy", chinese: "藥房" },
       { english: "billing office", chinese: "批價處" }
   ]}
+];
